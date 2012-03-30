@@ -9,7 +9,7 @@
 	<link href="style.css" rel="stylesheet" />
 </head>
 <body>
-	<label for="eqn">Equation:</label>
+	<label for="eqn">Expression:</label>
 	<input type="text" id="eqn"></input>
 	<div class="buttton_row">
 		<button>Derive</button>
@@ -44,7 +44,7 @@ $(function() {
 		$(".error").text("");
 		set_tex("typeset_eqn", ast.toTeX());
 		set_tex("simplified_eqn", ast.simplify().toTeX());
-		set_tex("derivative_eqn", ast.derive().simplify().toTeX());
+		set_tex("derivative_eqn", ast./*simplify().*/derive().simplify().toTeX());
 	});
 	
 });
