@@ -44,7 +44,7 @@ $(function() {
 		$(".error").text("");
 		set_tex("typeset_eqn", ast.toTeX());
 		set_tex("simplified_eqn", ast.simplify().toTeX());
-		set_tex("derivative_eqn", ast./*simplify().*/derive().simplify().toTeX());
+		set_tex("derivative_eqn", ast.simplify().derive().simplify().toTeX());
 	});
 	
 });

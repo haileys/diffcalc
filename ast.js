@@ -87,8 +87,9 @@ AST.Multiplication.prototype.derive = function() {
     return new AST.Addition(new AST.Multiplication(this.left.derive(), this.right), new AST.Multiplication(this.left, this.right.derive()));
 };
 AST.Multiplication.prototype.simplify = function() {
-    var left = this.left.simplify();
-    var right = this.right.simplify();
+    var me = this.coefficientize();
+    var left = me.left.simplify();
+    var right = me.right.simplify();
     if(left instanceof AST.Number && left.number == 0) {
         return new AST.Number(0);
     }
@@ -121,6 +122,27 @@ AST.Multiplication.prototype.simplify = function() {
     }
     if(left instanceof AST.Number && right instanceof AST.Number) {
         return new AST.Number(left.number * right.number);
+    }
+    return new AST.Multiplication(left, right);
+};
+AST.Multiplication.prototype.coefficientize = function() {
+    var left = this.left;
+    var right = this.right;
+    if(left.coefficientize) {
+        left = left.coefficientize();
+    }
+    if(right.coefficientize) {
+        right = right.coefficientize();
+    }
+    if(right instanceof AST.Number) {
+        var tmp = left;
+        left = right;
+        right = tmp;
+    }
+    if((left instanceof AST.Number) && (right instanceof AST.Multiplication)) {
+        if(right.left instanceof AST.Number) {
+            return new AST.Multiplication(new AST.Number(left.number * right.left.number), right.right);
+        }
     }
     return new AST.Multiplication(left, right);
 };
@@ -160,16 +182,47 @@ AST.Division.prototype.simplify = function() {
             return left;
         }
     }
-    if((left instanceof AST.Number) && (right instanceof AST.Number)) {
-        function gcd(a, b) {
-            if(b == 0) {
-                return a;
-            } else {
-                return gcd(b, a % b);
-            }
+    function gcd(a, b) {
+        if(b == 0) {
+            return a;
+        } else {
+            return gcd(b, a % b);
         }
+    }
+    if((left instanceof AST.Number) && (right instanceof AST.Number)) {
         var factor = gcd(left.number, right.number);
-        return new AST.Division(new AST.Number(left.number / factor), new AST.Number(right.number / factor));
+        if(right.number == factor) {
+            return new AST.Number(left.number / factor);
+        } else {
+            return new AST.Division(new AST.Number(left.number / factor), new AST.Number(right.number / factor));
+        }
+    }
+    if((left instanceof AST.Number) && (right instanceof AST.Multiplication)) {
+        right = right.simplify();
+        if(right.left instanceof AST.Number) {
+            var factor = gcd(left.number, right.left.number);
+            var top = new AST.Number(left.number / factor);
+            var bottom = new AST.Multiplication(new AST.Number(right.left.number / factor), right.right);
+            if(right.left.number == factor) {
+                bottom = bottom.right;
+            }
+            return new AST.Division(top, bottom);
+        }
+    }
+    if((left instanceof AST.Multiplication) && (right instanceof AST.Number)) {
+        left = left.simplify();
+        if(left.left instanceof AST.Number) {
+            var factor = gcd(left.left.number, right.number);
+            var top = new AST.Multiplication(new AST.Number(left.left.number / factor), left.right);
+            var bottom = new AST.Number(right.number / factor);
+            if(left.left.number == factor) {
+                top = top.right;
+            }
+            return new AST.Division(top, bottom);
+        }
+    }
+    if((left instanceof AST.Multiplication) && (right instanceof AST.Multiplication)) {
+        
     }
     if((left instanceof AST.Negation) && (right instanceof AST.Negation)) {
         return new AST.Division(left.node, right.node).simplify();
