@@ -186,8 +186,11 @@ AST.Power.prototype.simplify = function() {
             return left;
         }
     }
-    if(left instanceof AST.Number && right instanceof AST.Number) {
+    if((left instanceof AST.Number) && (right instanceof AST.Number)) {
         return new AST.Number(Math.pow(left.number, right.number));
+    }
+    if((left instanceof AST.E) && (right instanceof AST.LogNatural)) {
+        return right.node;
     }
 	return new AST.Power(left, right);
 };
@@ -257,6 +260,23 @@ AST.X.prototype.toTeX = function() {
 
 
 
+AST.E = function() {
+};
+AST.E.prototype.derive = function() {
+	return new AST.Number(1);
+};
+AST.E.prototype.simplify = function() {
+	return this;
+};
+AST.E.prototype.toString = function() {
+	return "e";
+};
+AST.E.prototype.toTeX = function() {
+    return "e";
+};
+
+
+
 AST.LogNatural = function(node) {
     this.node = node;
 };
@@ -264,11 +284,19 @@ AST.LogNatural.prototype.derive = function() {
 	return new AST.Division(this.node.derive(), this.node);
 };
 AST.LogNatural.prototype.simplify = function() {
-	return new AST.LogNatural(this.node.simplify());
+    var node = this.node.simplify();
+    if((node instanceof AST.Power) && (node.left instanceof AST.E)) {
+        return node.right;
+    }
+	return new AST.LogNatural(node);
 };
 AST.LogNatural.prototype.toString = function() {
 	return "ln(" + this.node.toString() + ")";
 };
 AST.LogNatural.prototype.toTeX = function() {
-    return "\\log_{e}{" + this.node.toTeX() + "}";
+    var tex = this.node.toTeX();
+    if(this.node.precedence) {
+        tex = "\\left(" + tex + "\\right)";
+    }
+    return "\\log_{e}{" + tex + "}";
 };

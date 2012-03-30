@@ -5,7 +5,7 @@ function Parser(src) {
 		WHITESPACE:		/^\s+/,
 		NUMBER: 		/^(\d+(\.?\d*([eE][+-]?\d+)?)?|\.\d+([eE][+-]?\d+)?)/,
 		FUNCTION:		/^([a-z]+)\(/i,
-		VARIABLE: 		/^x/, // /^([a-z]+)(?!\()/i,
+		VARIABLE: 		/^([a-z]+)/i,
 		EQUALS:			/^=/,
 		PLUS:			/^\+/,
 		MINUS:			/^-/,
@@ -21,6 +21,11 @@ function Parser(src) {
 	this.functions = {
 	    ln: AST.LogNatural
 	};
+	
+	this.variables = {
+        x: AST.X,
+        e: AST.E
+	}
 };
 
 Parser.Error = function(msg) {
@@ -117,8 +122,12 @@ Parser.prototype.unary_expression = function() {
 			this.next_token();
 			return new AST.Negation(this.unary_expression());
 		case "VARIABLE":
-			this.next_token();
-			return new AST.X();
+			var name = this.next_token()[1][0];
+			var variable = this.variables[name];
+			if(!variable) {
+			    throw new Parser.Error("Undefined variable '" + name + "'");
+			}
+			return new variable();
 		case "FUNCTION":
 		    var name = this.next_token()[1][1];
 		    var fn = this.functions[name];
