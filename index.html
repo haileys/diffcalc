@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Differential Calculator</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script type="text/javascript" src="ast.js"></script>
+	<script type="text/javascript" src="parser.js"></script>
+	<link href="style.css" rel="stylesheet" />
+</head>
+<body>
+	<label for="eqn">Equation:</label>
+	<input type="text" id="eqn"></input>
+	<div class="buttton_row">
+		<button>Derive</button>
+		<span class="error"></span>
+	</div>
+	<div class="clear"></div>
+	<div class="tex" id="typeset_eqn">$$ $$</div>
+	<h2>Simplified:</h2>
+	<div class="tex" id="simplified_eqn">$$ $$</div>
+	<h2>Derivative:</h2>
+	<div class="tex" id="derivative_eqn">$$ $$</div>
+	<!--
+	<label>Solution:</label>
+	<div class="tex" id="domain">$$ $$</div>
+	-->
+</body>
+<script>
+function set_tex(id, tex) {
+	MathJax.Hub.Queue(["Text", MathJax.Hub.getAllJax(id)[0], tex]);
+}
+$(function() {	
+	var eqn = $("#eqn");
+	
+	$("button").click(function() {
+		var expression = eqn.val();
+		try {
+			var ast = new Parser(expression).parse();
+		} catch(e) {
+			$(".error").text(e.toString());
+			return;
+		}
+		$(".error").text("");
+		set_tex("typeset_eqn", ast.toTeX());
+		set_tex("simplified_eqn", ast.simplify().toTeX());
+		set_tex("derivative_eqn", ast.derive().simplify().toTeX());
+	});
+	
+});
+</script>
+</html>

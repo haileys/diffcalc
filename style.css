@@ -1,0 +1,56 @@
+body {
+    font-family:Verdana;
+    margin:32px 128px;
+}
+
+label {
+    display:block;
+    margin-bottom:12px;
+}
+
+#eqn {
+    font-family:Monaco, Consolas, "Lucida Console", monospace;
+    padding:8px;
+    font-size:16px;
+    line-height:20px;
+    width:600px;
+    margin-bottom:16px;
+    display:block;
+}
+
+.button_row {
+    height:32px;
+    clear:both;
+}
+
+.clear {
+    clear:both;
+}
+
+button {
+    display:block;
+    padding:8px 16px;
+    margin-bottom:12px;
+    float:left;
+}
+
+h2 {
+    font-size:14px;
+    margin-bottom:12px;
+    font-weight:bold;
+}
+
+.tex {
+    display:block;
+    width:600px;
+    padding:16px auto;
+    text-align:center;
+}
+
+.error {
+    margin-left:16px;
+    margin-top:9px;
+    font-size:12px;
+    float:left;
+    color:red;
+}
