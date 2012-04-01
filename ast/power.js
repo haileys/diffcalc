@@ -47,6 +47,9 @@ AST.Power.prototype.simplify = function() {
     if((left instanceof AST.E) && (right instanceof AST.LogNatural)) {
         return right.node;
     }
+    if(left instanceof AST.Power) {
+        return new AST.Power(left.left, new AST.Multiplication(left.right, right)).simplify();
+    }
     return new AST.Power(left, right);
 };
 
