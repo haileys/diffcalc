@@ -54,7 +54,7 @@ AST.Division.prototype.simplify = function() {
     }
     
     if(left instanceof AST.Division) {
-        return new AST.Division(left.left, new AST.Multiplication(left.right, right));
+        return new AST.Division(left.left, new AST.Multiplication(left.right, right)).simplify();
     }
 
     if((left instanceof AST.Negation) && (right instanceof AST.Negation)) {
