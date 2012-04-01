@@ -44,11 +44,12 @@
 function set_tex(id, tex) {
 	MathJax.Hub.Queue(["Text", MathJax.Hub.getAllJax(id)[0], tex]);
 }
-$(function() {	
+$(function() {
 	var eqn = $("#eqn");
 	
-	$("button").click(function() {
+	$("button").click(function update() {
 		var expression = eqn.val();
+		location.hash = "#" + expression;
 		try {
 			var ast = new Parser(expression).parse();
 		} catch(e) {
@@ -61,6 +62,12 @@ $(function() {
 		set_tex("derivative_eqn", ast.simplify().derive().simplify().toTeX());
 	});
 	
+	if(location.hash) {
+		eqn.val(location.hash.substr(1));
+		setTimeout(function() {
+			$("button").click();
+		}, 250);
+	}
 });
 </script>
 </html>
