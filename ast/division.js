@@ -49,6 +49,14 @@ AST.Division.prototype.simplify = function() {
         }
     }
 
+    if(right instanceof AST.Division) {
+        return new AST.Multiplication(left, new AST.Division(right.right, right.left)).simplify();
+    }
+    
+    if(left instanceof AST.Division) {
+        return new AST.Division(left.left, new AST.Multiplication(left.right, right));
+    }
+
     if((left instanceof AST.Negation) && (right instanceof AST.Negation)) {
         return new AST.Division(left.node, right.node).simplify();
     }
