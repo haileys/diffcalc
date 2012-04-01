@@ -20,6 +20,9 @@ AST.Addition.prototype.simplify = function() {
     if(left.identical(right)) {
         return new AST.Multiplication(new AST.Number(2), left).simplify();
     }
+    if(left instanceof AST.Multiplication && left.left instanceof AST.Number && left.right.identical(right)) {
+        return new AST.Multiplication(new AST.Number(left.left.number + 1), left.right).simplify();
+    }
     if(left instanceof AST.Number && left.number == 0) {
         return right;
     }
