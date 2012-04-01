@@ -82,6 +82,10 @@ AST.Division.prototype.removeCommonFactors = function() {
     
     for(var i = 0; i < top_muls.length; i++) {
         for(var j = 0; j < bottom_muls.length; j++) {
+            if(top_muls[i] instanceof AST.Sin && bottom_muls[j] instanceof AST.Cos && top_muls[i].node.identical(bottom_muls[j].node)) {
+                top_muls[i] = new AST.Tan(top_muls[i].node);
+                bottom_muls[j] = new AST.Number(1);
+            }
             if(top_muls[i] instanceof AST.Power && top_muls[i].right instanceof AST.Number && top_muls[i].left.identical(bottom_muls[j])) {
                 top_muls[i] = new AST.Power(top_muls[i].left, new AST.Number(top_muls[i].right.number - 1)).simplify();
                 bottom_muls[j] = new AST.Number(1);
