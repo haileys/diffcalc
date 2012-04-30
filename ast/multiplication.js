@@ -80,6 +80,11 @@ AST.Multiplication.prototype.simplify = function() {
     if(right instanceof AST.Division) {
         return new AST.Division(new AST.Multiplication(left, right.left), right.right).simplify();
     }
+    if(left instanceof AST.Number && right instanceof AST.Multiplication) {
+        if(right.left instanceof AST.Number) {
+            return new AST.Multiplication(new AST.Number(left.number * right.left.number), right.right).simplify();
+        }
+    }
     
     return new AST.Multiplication(left, right);
 };

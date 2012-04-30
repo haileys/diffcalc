@@ -50,6 +50,9 @@ AST.Power.prototype.simplify = function() {
     if(left instanceof AST.Power) {
         return new AST.Power(left.left, new AST.Multiplication(left.right, right)).simplify();
     }
+    if(left instanceof AST.Multiplication && right instanceof AST.Number) {
+        return new AST.Multiplication(new AST.Power(left.left, right), new AST.Power(left.right, right)).simplify();
+    }
     return new AST.Power(left, right);
 };
 
