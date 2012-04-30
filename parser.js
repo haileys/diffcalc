@@ -152,6 +152,6 @@ Parser.prototype.unary_expression = function() {
             var n = Number(token[1][0]);
             return new AST.Number(n);
         default:
-            throw new Parser.Error("Unexpected token '" + this.peek_token()[0] + "'");
+            throw new Parser.Error("unexpected token '" + this.peek_token()[0] + "'");
     }
 };
