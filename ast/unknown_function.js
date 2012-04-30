@@ -11,8 +11,7 @@ AST.UnknownFunction.prototype.derive = function() {
 };
 
 AST.UnknownFunction.prototype.simplify = function() {
-    var node = this.node.simplify();
-    return new AST.UnknownFunction(this.name, node);
+    return new AST.UnknownFunction(this.name, this.node.simplify());
 };
 
 AST.UnknownFunction.prototype.identical = function(other) {
