@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="ast/sin.js"></script>
 	<script type="text/javascript" src="ast/cos.js"></script>
 	<script type="text/javascript" src="ast/tan.js"></script>
+	<script type="text/javascript" src="ast/unknown_function.js"></script>
 	<script type="text/javascript" src="parser.js"></script>
 	<link href="style.css" rel="stylesheet" />
 </head>
@@ -35,6 +36,8 @@
 	<div class="tex" id="simplified_eqn">$$ $$</div>
 	<h2>Derivative:</h2>
 	<div class="tex" id="derivative_eqn">$$ $$</div>
+	<h2>Simplified Derivative:</h2>
+	<div class="tex" id="simplified_derivative_eqn">$$ $$</div>
 	<!--
 	<label>Solution:</label>
 	<div class="tex" id="domain">$$ $$</div>
@@ -59,7 +62,8 @@ $(function() {
 		$(".error").text("");
 		set_tex("typeset_eqn", ast.toTeX());
 		set_tex("simplified_eqn", ast.simplify().toTeX());
-		set_tex("derivative_eqn", ast.simplify().derive().simplify().toTeX());
+		set_tex("derivative_eqn", ast.simplify().derive().toTeX());
+		set_tex("simplified_derivative_eqn", ast.simplify().derive().simplify().toTeX());
 	});
 	
 	if(location.hash) {

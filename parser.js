@@ -4,8 +4,8 @@ function Parser(src) {
     this.tokens = {
         WHITESPACE:     /^\s+/,
         NUMBER:         /^(\d+(\.?\d*([eE][+-]?\d+)?)?|\.\d+([eE][+-]?\d+)?)/,
-        FUNCTION:       /^([a-z]+)\(/i,
-        VARIABLE:       /^([a-z]+)/i,
+        FUNCTION:       /^([a-z]+\'*)\(/i,
+        VARIABLE:       /^([a-z]+\'*)/i,
         EQUALS:         /^=/,
         PLUS:           /^\+/,
         MINUS:          /^-/,
@@ -134,12 +134,13 @@ Parser.prototype.unary_expression = function() {
         case "FUNCTION":
             var name = this.next_token()[1][1];
             var fn = this.functions[name];
-            if(!fn) {
-                throw new Parser.Error("Undefined function '" + name + "'");
-            }
             var expr = this.expression();
             this.expect_token("CLOSE_PAREN");
-            return new fn(expr);
+            if(fn) {
+                return new fn(expr);
+            } else {
+                return new AST.UnknownFunction(name, expr);
+            }
         case "OPEN_PAREN":
             this.next_token();
             expr = this.expression();

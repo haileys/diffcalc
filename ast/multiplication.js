@@ -40,7 +40,7 @@ AST.Multiplication.prototype.simplify = function() {
         }
     }
     if(left.identical(right)) {
-        return new AST.Power(left, new AST.Number(2));
+        return new AST.Power(left, new AST.Number(2)).simplify();
     }
     if(left instanceof AST.Number && left.number == 0) {
         return new AST.Number(0);
