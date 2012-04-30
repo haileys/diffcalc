@@ -16,5 +16,5 @@ AST.UnknownFunction.prototype.simplify = function() {
 };
 
 AST.UnknownFunction.prototype.identical = function(other) {
-    return (other instanceof AST.UnknownFunction) && this.name = other.name && this.node.identical(other.node);
+    return (other instanceof AST.UnknownFunction) && this.name == other.name && this.node.identical(other.node);
 };

@@ -4,7 +4,7 @@ function Parser(src) {
     this.tokens = {
         WHITESPACE:     /^\s+/,
         NUMBER:         /^(\d+(\.?\d*([eE][+-]?\d+)?)?|\.\d+([eE][+-]?\d+)?)/,
-        FUNCTION:       /^([a-z]+\'*)\(/i,
+        FUNCTION:       /^(d\/dx|([a-z]+\'*))\(/i,
         VARIABLE:       /^([a-z]+\'*)/i,
         EQUALS:         /^=/,
         PLUS:           /^\+/,
@@ -22,7 +22,8 @@ function Parser(src) {
         ln:     AST.LogNatural,
         sin:    AST.Sin,
         cos:    AST.Cos,
-        tan:    AST.Tan
+        tan:    AST.Tan,
+        "d/dx": AST.Derivative
     };
 
     this.variables = {

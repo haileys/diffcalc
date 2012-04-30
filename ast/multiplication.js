@@ -90,10 +90,10 @@ AST.Multiplication.prototype.simplify = function() {
 };
 
 AST.Multiplication.prototype.toTeX = function() {
-    if((this.left instanceof AST.Number) && !this.right.precedence) {
+    if((this.left instanceof AST.Number) && !(this.right instanceof AST.Number) && !this.right.precedence) {
         return this.left.toTeX() + this.right.toTeX();
     }
-    if((this.right instanceof AST.Number) && !this.left.precedence) {
+    if((this.right instanceof AST.Number) && !(this.left instanceof AST.Number) && !this.left.precedence) {
         return this.right.toTeX() + this.left.toTeX();
     }
     return AST.BinaryOperation.prototype.toTeX.call(this);

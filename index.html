@@ -20,6 +20,7 @@
 	<script type="text/javascript" src="ast/cos.js"></script>
 	<script type="text/javascript" src="ast/tan.js"></script>
 	<script type="text/javascript" src="ast/unknown_function.js"></script>
+	<script type="text/javascript" src="ast/derivative.js"></script>
 	<script type="text/javascript" src="parser.js"></script>
 	<link href="style.css" rel="stylesheet" />
 </head>
@@ -34,8 +35,8 @@
 	<div class="tex" id="typeset_eqn">$$ $$</div>
 	<h2>Simplified:</h2>
 	<div class="tex" id="simplified_eqn">$$ $$</div>
-	<h2>Derivative:</h2>
-	<div class="tex" id="derivative_eqn">$$ $$</div>
+	<h2>Derivative: (<a href="#" id="show_derivative">show</a>)</h2>
+	<div class="tex" id="derivative_eqn" style="display:none;">$$ $$</div>
 	<h2>Simplified Derivative:</h2>
 	<div class="tex" id="simplified_derivative_eqn">$$ $$</div>
 	<!--
@@ -64,6 +65,17 @@ $(function() {
 		set_tex("simplified_eqn", ast.simplify().toTeX());
 		set_tex("derivative_eqn", ast.simplify().derive().toTeX());
 		set_tex("simplified_derivative_eqn", ast.simplify().derive().simplify().toTeX());
+	});
+	
+	$("#show_derivative").click(function() {
+		var me = $(this);
+		if(me.text() == "show") {
+			me.text("hide");
+			$("#derivative_eqn").show();
+		} else {
+			me.text("show");
+			$("#derivative_eqn").hide();
+		}
 	});
 	
 	if(location.hash) {
