@@ -100,10 +100,10 @@ Parser.prototype.additive_expression = function() {
     return expr;
 };
 Parser.prototype.multiplicative_expression = function() {
-    var expr = this.power_expression();
+    var expr = this.implicit_multiplicative_expression();
     while(this.peek_token()[0] == "TIMES" || this.peek_token()[0] == "DIVIDE") {
         var type = this.next_token()[0];
-        var r = this.power_expression();
+        var r = this.implicit_multiplicative_expression();
         if(type == "TIMES") {
             expr = new AST.Multiplication(expr, r);
         } else {
@@ -112,6 +112,14 @@ Parser.prototype.multiplicative_expression = function() {
     }
     return expr;
 };
+Parser.prototype.implicit_multiplicative_expression = function() {
+    var expr = this.power_expression();
+    while(this.peek_token()[0] == "VARIABLE" || this.peek_token()[0] == "FUNCTION") {
+        var r = this.power_expression();
+        expr = new AST.Multiplication(expr, r);
+    }
+    return expr;
+}
 Parser.prototype.power_expression = function() {
     var expr = this.unary_expression();
     if(this.peek_token()[0] == "POWER") {
