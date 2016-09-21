@@ -3,7 +3,7 @@
 <head>
 	<title>Differential Calculator</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-	<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 	<script type="text/javascript" src="ast.js"></script>
 	<script type="text/javascript" src="ast/addition.js"></script>
 	<script type="text/javascript" src="ast/subtraction.js"></script>
@@ -50,7 +50,7 @@ function set_tex(id, tex) {
 }
 $(function() {
 	var eqn = $("#eqn");
-	
+
 	$("button").click(function update() {
 		var expression = eqn.val();
 		location.hash = "#" + expression;
@@ -66,7 +66,7 @@ $(function() {
 		set_tex("derivative_eqn", ast.simplify().derive().toTeX());
 		set_tex("simplified_derivative_eqn", ast.simplify().derive().simplify().toTeX());
 	});
-	
+
 	$("#show_derivative").click(function() {
 		var me = $(this);
 		if(me.text() == "show") {
@@ -77,7 +77,7 @@ $(function() {
 			$("#derivative_eqn").hide();
 		}
 	});
-	
+
 	if(location.hash) {
 		eqn.val(location.hash.substr(1));
 		setTimeout(function() {
